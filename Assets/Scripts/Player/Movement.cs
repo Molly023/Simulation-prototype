@@ -25,8 +25,6 @@ public class Movement : MonoBehaviour {
         //    }
         //    anim?.SetBool("isMoving", isMoving);
         //}
-
-        //if(!Physics2D.Raycast(transform.position, direction.normalized, 1))
         rb2d.velocity = direction * speed * Time.deltaTime;
 
     }

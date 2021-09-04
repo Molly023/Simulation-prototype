@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    SpriteRenderer head;
     SpriteRenderer body;
 
     public InteractableDetection InteractableInRange;
-    [System.NonSerialized] public Movement Movement;
+    public Movement Movement { get; private set; }
+    public Inventory Inventory { get; private set; }
+
+    public int Money;
 
     private void Start() {
         Movement = GetComponent<Movement>();
+        Inventory = GetComponent<Inventory>();
     }
 }

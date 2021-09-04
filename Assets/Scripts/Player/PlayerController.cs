@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum ControlState {
+    Player, Shop, Dialogue
+}
+
 public class PlayerController : MonoBehaviour {
 
     public Player Control;
@@ -8,20 +12,31 @@ public class PlayerController : MonoBehaviour {
     Interactable hoveredInteractable;
     WorldUI showableUI;
 
+   
+    ControlState currentState = ControlState.Player;
+    public ControlState State {
+        set {
+            currentState = value;
+        }
+    }
+
     void Awake() {
         showableUI = SingletonManager.Get<WorldUI>();
+        SingletonManager.Register(this);
     }
 
     void Start() {
         StartCoroutine(RaycastInteractables());
-        
-        
     }
 
     void FixedUpdate() {
 
-        Control.Movement.Move(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
-        
+        if (currentState == ControlState.Player) {
+            Control.Movement.Move(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
+
+        }
+
+        Debug.Log(currentState);
     }
 
     private void LateUpdate() {
@@ -30,11 +45,9 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
 
-        if (Input.GetButtonDown("Interact")) {
+        if (Input.GetButtonDown("Interact") && currentState == ControlState.Player) {
             hoveredInteractable?.Interact();
         }
-
-        Debug.Log(hoveredInteractable);
 
     }
 
@@ -42,8 +55,8 @@ public class PlayerController : MonoBehaviour {
 
         while (true) {
 
-            //Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            if (currentState != ControlState.Player) yield return new WaitForSeconds(.1f);
+
             Physics2D.queriesHitTriggers = false;
             Collider2D col = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
