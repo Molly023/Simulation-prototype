@@ -1,28 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public enum ControlState {
-    Player, Shop, Dialogue
+    Player, Shop, Dialogue, Inventory
 }
 
 public class PlayerController : MonoBehaviour {
 
+    public Action Evt_CloseShopUI;
+    public Action Evt_Next;
     public Player Control;
-    public CameraController MainCamera;
+    CameraController mainCamera;
+    
     Interactable hoveredInteractable;
-    WorldUI showableUI;
-
+    
+    GameObject showableUI;
    
     ControlState currentState = ControlState.Player;
     public ControlState State {
+        get => currentState;
         set {
             currentState = value;
         }
     }
 
     void Awake() {
-        showableUI = SingletonManager.Get<WorldUI>();
+
+        showableUI = SingletonManager.Get<UI>().InteractableUI;
         SingletonManager.Register(this);
+        mainCamera = SingletonManager.Get<CameraController>();
     }
 
     void Start() {
@@ -35,18 +42,37 @@ public class PlayerController : MonoBehaviour {
             Control.Movement.Move(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
 
         }
-
-        Debug.Log(currentState);
     }
 
     private void LateUpdate() {
-        MainCamera.FollowPlayer(Control.transform);
+        mainCamera.FollowPlayer(Control.transform);
     }
 
     void Update() {
 
         if (Input.GetButtonDown("Interact") && currentState == ControlState.Player) {
-            hoveredInteractable?.Interact();
+            hoveredInteractable?.Interact(Control);
+        }
+
+        if (Input.GetButtonDown("Cancel")) {
+            if(currentState == ControlState.Player) {
+                Control.Inventory.ToggleInventory();
+                currentState = ControlState.Inventory;
+            }
+            else if(currentState == ControlState.Inventory) {
+                Control.Inventory.ToggleInventory();
+                currentState = ControlState.Player;
+            }
+            else if(currentState == ControlState.Shop) {
+                Evt_CloseShopUI?.Invoke();
+            }
+        }
+
+        if (State == ControlState.Dialogue) {
+            if (Input.GetButtonDown("Next")) {
+                
+                Evt_Next?.Invoke();
+            }
         }
 
     }
@@ -55,7 +81,10 @@ public class PlayerController : MonoBehaviour {
 
         while (true) {
 
-            if (currentState != ControlState.Player) yield return new WaitForSeconds(.1f);
+            if (currentState != ControlState.Player) {
+                yield return null;
+                continue;
+            }
 
             Physics2D.queriesHitTriggers = false;
             Collider2D col = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -77,7 +106,7 @@ public class PlayerController : MonoBehaviour {
             if (hoveredInteractable) 
                 hoveredInteractable.ShowInteractableUI(true);
             else 
-                showableUI.InteractableUI.SetActive(false);
+                showableUI.SetActive(false);
 
 
             yield return new WaitForSeconds(.1f);

@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using System;
 
 public static class SingletonManager
 {
     private static Dictionary<System.Type, MonoBehaviour> singletons = new Dictionary<System.Type, MonoBehaviour>();
+
+    public static Action<MonoBehaviour> Evt_Registered;
 
     static SingletonManager() {
         SceneManager.sceneUnloaded += delegate {
@@ -41,6 +44,7 @@ public static class SingletonManager
 	public static void Register<T>(T obj) where T : MonoBehaviour {
         Assert.IsNull(Get<T>(), typeof(T).Name + " singleton already exists");
         singletons[typeof(T)] = obj;
+        Evt_Registered?.Invoke(obj);
     }
 
     /// <summary>

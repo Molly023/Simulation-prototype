@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    new Camera camera;
+    Camera camera;
     public float Speed;
     [SerializeField] Vector2 cameraMinViewportThreshold;
     [SerializeField] Vector2 cameraMaxViewportThreshold;
 
+    public Camera uiCamera;
+
+    private void Awake() {
+        SingletonManager.Register(this);
+    }
+
     private void Start() {
         
         camera = Camera.main;
-
+        
     }
 
     public void FollowPlayer(Transform player) {

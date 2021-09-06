@@ -19,6 +19,19 @@ public class Tooltip : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    public void Show() {
+        transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        gameObject.SetActive(true);
+    }
+
+    public void SetName(string name) {
+        Name.text = name;
+    }
+
+    public void SetDescription(string description) {
+        Description.text = description;
+    }
+
     public void Hide() {
         gameObject.SetActive(false) ;
     }

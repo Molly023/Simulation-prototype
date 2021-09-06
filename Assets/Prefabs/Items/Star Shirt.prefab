@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9179291847524908344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371075893505410348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b24af76a30948b49bb2eafa6ed5628c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 1
 --- !u!1001 &4598897359048904478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59,5 +72,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Star Shirt
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2221975811927182600, guid: 7c6a0da7544d4df4fb476bdaf9f69d5c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7c6a0da7544d4df4fb476bdaf9f69d5c, type: 3}
+--- !u!1 &371075893505410348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4248235058588961330, guid: 7c6a0da7544d4df4fb476bdaf9f69d5c, type: 3}
+  m_PrefabInstance: {fileID: 4598897359048904478}
+  m_PrefabAsset: {fileID: 0}

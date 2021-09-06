@@ -3,31 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class ShopUI : MonoBehaviour {
 
     public Action<Item> Evt_BoughtItem;
     public Action Evt_Closed;
+    public Action<int> Evt_SellItem;
 
     public RectTransform content;
+    public TextMeshProUGUI moneyText;
 
     public SellSlot SellSlotPrefab;
     List<SellSlot> SellSlots = new List<SellSlot>();
     Tooltip tooltip;
+    public InventoryUI InventoryUI;
 
     private void Start() {
-        tooltip = SingletonManager.Get<WorldUI>().Tooltip;
+
+        tooltip = SingletonManager.Get<UI>().Tooltip;
+
+        foreach (Slot slot in InventoryUI.ItemSlots) {
+            slot.Evt_RightClicked.AddListener(SellItem);
+        }
     }
 
     public void OpenShop(List<Item> itemsSelling) {
+        
         gameObject.SetActive(true);
+
         for (int i = SellSlots.Count; i < itemsSelling.Count; i++) {
             
             SellSlots.Add(Instantiate(SellSlotPrefab, content));
             
-            SellSlots[i].Evt_Hovered.AddListener(ShowTooltip);
-            SellSlots[i].Evt_Exited.AddListener(HideTooltip);
-           // SellSlots[i].Evt_RightClickBought
+            SellSlots[i].Evt_RightClicked.AddListener(BoughtItem);
             //SellSlots[i].Evt_RightClicked.AddListener()
         }
 
@@ -43,8 +52,14 @@ public class ShopUI : MonoBehaviour {
     }
 
   
-    public void BoughtItem(Item item) {
+    public void BoughtItem(Slot itemSlot) {
+        Evt_BoughtItem?.Invoke(itemSlot.Item);
 
+    }
+
+    public void CloseShop() {
+        Evt_Closed?.Invoke();
+        HideTooltip();
     }
 
     public void HideTooltip() {
@@ -52,11 +67,21 @@ public class ShopUI : MonoBehaviour {
         tooltip.Hide();
     }
 
-    void ShowTooltip(Item item) { 
-        tooltip.Show(item.Name, item.Description);
+    public void SetPlayerMoney(int money) {
+        moneyText.text = money.ToString();
     }
 
-    public void CloseShop() {
-        Evt_Closed?.Invoke();
+    public void ShowPlayerMoneyText(bool show) {
+
+
+        moneyText.gameObject.SetActive(show);
+    }
+
+    public void SellItem(Slot itemSlot) {
+        Evt_SellItem?.Invoke(InventoryUI.ItemSlots.IndexOf(itemSlot));
+    }
+
+    public void UpdateInventory(Inventory inventory) {
+        InventoryUI.UpdateData(inventory);
     }
 }
