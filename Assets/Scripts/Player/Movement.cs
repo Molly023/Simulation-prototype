@@ -13,19 +13,6 @@ public class Movement : MonoBehaviour {
     }
     public void Move(Vector2 direction) {
 
-        //if (direction.x != 0) {
-        //    direction.y = 0;
-        //}
-
-        //bool isMoving = direction.x != 0 || direction.y != 0;
-        //if (anim) {
-        //    if (isMoving) {
-        //        anim?.SetFloat("Horizontal", direction.x);
-        //        anim?.SetFloat("Vertical", direction.y);
-        //    }
-        //    anim?.SetBool("isMoving", isMoving);
-        //}
         rb2d.velocity = direction * speed * Time.deltaTime;
-
     }
 }
