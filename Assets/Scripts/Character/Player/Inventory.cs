@@ -7,7 +7,7 @@ public class Inventory : MonoBehaviour {
 
     public Action<Equippable> Evt_OnEquip;
     public Item[] Items { get; private set; }
-    [SerializeField] int itemsCanStore;
+    [SerializeField] int itemsCanStore = 24;
 
     public Equippable EquippedItem { get; private set; }
 
@@ -26,6 +26,7 @@ public class Inventory : MonoBehaviour {
             if (!Items[i]) {
 
                 Items[i] = itemToAdd;
+                inventoryUI?.UpdateData(this);
                 return true;
             }
         }
@@ -33,6 +34,14 @@ public class Inventory : MonoBehaviour {
         inventoryUI?.UpdateData(this);
 
         return false;
+    }
+
+    public bool AddItem(Item itemAdd, int index) {
+        if (Items[index]) return false;
+        Items[index] = itemAdd;
+
+        inventoryUI?.UpdateData(this);
+        return true;
     }
 
     public bool Remove(Item itemToRemove) {
@@ -86,6 +95,14 @@ public class Inventory : MonoBehaviour {
         inventoryUI?.UpdateData(this);
     }
 
+    public void Unequip() {
+        AddItem(EquippedItem);
+        EquippedItem = null;
+
+        Evt_OnEquip?.Invoke(EquippedItem);
+        inventoryUI?.UpdateData(this);
+    }
+
     public bool ToggleInventory() {
         if (!inventoryUI)
             SetInventoryUI();
@@ -99,5 +116,6 @@ public class Inventory : MonoBehaviour {
         inventoryUI = SingletonManager.Get<UI>().InventoryUI;
         inventoryUI.Evt_Swapping.AddListener(SwapItems);
         inventoryUI.Evt_Equip.AddListener(Equip);
+        inventoryUI.Evt_Unequip.AddListener(Unequip);
     }
 }

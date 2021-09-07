@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    Camera camera;
+    new Camera camera;
     public float Speed;
     [SerializeField] Vector2 cameraMinViewportThreshold;
     [SerializeField] Vector2 cameraMaxViewportThreshold;

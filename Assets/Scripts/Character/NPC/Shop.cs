@@ -50,7 +50,6 @@ public class Shop : MonoBehaviour {
     #region ShopFunctionalities
     void Buy(Item item) {
 
-        
         if (!playerInShop.Buy(item.Price)) {
             if (moneyCoroutine != null)
                 StopCoroutine(moneyCoroutine);
@@ -59,17 +58,37 @@ public class Shop : MonoBehaviour {
             return;
         }
 
+
         if (playerInventory.AddItem(item)) {
-            
+
             shopUI.SetPlayerMoney(playerInShop.Money);
 
             shopUI.InventoryUI.UpdateData(playerInventory);
-
         }
+        else playerInShop.Sell(playerInShop.Money);
         
     }
 
-   
+    void Buy(Item item, int index) {
+
+        if (!playerInShop.Buy(item.Price)) {
+            if (moneyCoroutine != null)
+                StopCoroutine(moneyCoroutine);
+
+            moneyCoroutine = StartCoroutine(FlickerMoney());
+            return;
+        }
+
+        if (playerInventory.AddItem(item, index)) {
+            shopUI.SetPlayerMoney(playerInShop.Money);
+
+            shopUI.InventoryUI.UpdateData(playerInventory);
+        }
+        else playerInShop.Sell(playerInShop.Money);
+
+    }
+
+
 
     void Sell(int index) {
 
@@ -96,6 +115,7 @@ public class Shop : MonoBehaviour {
         shopUI.Evt_BoughtItem += Buy;
         shopUI.Evt_SellItem += Sell;
         shopUI.InventoryUI.Evt_Swapping.AddListener(RearrangeInventory);
+        shopUI.Evt_BoughtItemWithIndex += Buy;
 
         PlayerController pController = SingletonManager.Get<PlayerController>();
         pController.Evt_CloseShopUI += shopUI.CloseShop;

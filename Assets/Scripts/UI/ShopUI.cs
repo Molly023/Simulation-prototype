@@ -8,6 +8,7 @@ using TMPro;
 public class ShopUI : MonoBehaviour {
 
     public Action<Item> Evt_BoughtItem;
+    public Action<Item, int> Evt_BoughtItemWithIndex;
     public Action Evt_Closed;
     public Action Evt_Opened;
     public Action<int> Evt_SellItem;
@@ -18,16 +19,19 @@ public class ShopUI : MonoBehaviour {
     public SellSlot SellSlotPrefab;
     List<SellSlot> SellSlots = new List<SellSlot>();
     Tooltip tooltip;
-    Image draggableImage;
+    Image draggedImage;
+    Slot draggedSlot;
+
     public InventoryUI InventoryUI;
 
     private void Start() {
         UI ui = SingletonManager.Get<UI>();
         tooltip = ui.Tooltip;
-        draggableImage = ui.DraggedImage;
+        draggedImage = ui.DraggedImage;
 
         foreach (Slot slot in InventoryUI.ItemSlots) {
             slot.Evt_RightClicked.AddListener(SellItem);
+            slot.Evt_Dropped.AddListener(Drop);
         }
     }
 
@@ -36,11 +40,12 @@ public class ShopUI : MonoBehaviour {
         gameObject.SetActive(true);
 
         for (int i = SellSlots.Count; i < itemsSelling.Count; i++) {
-            
+
             SellSlots.Add(Instantiate(SellSlotPrefab, content));
-            
             SellSlots[i].Evt_RightClicked.AddListener(BoughtItem);
-            //SellSlots[i].Evt_RightClicked.AddListener()
+            SellSlots[i].Evt_Dragged.AddListener(Drag);
+            SellSlots[i].Evt_EndDragged.AddListener(EndDrag);
+            
         }
 
         for (int i = 0; i < itemsSelling.Count; i++) {
@@ -89,4 +94,26 @@ public class ShopUI : MonoBehaviour {
     public void UpdateInventory(Inventory inventory) {
         InventoryUI.UpdateData(inventory);
     }
+
+    public void Drag(Slot slot) {
+        draggedSlot = slot;
+        draggedImage.sprite = slot.ItemSprite.sprite;
+        draggedImage.gameObject.SetActive(true);
+        draggedImage.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(0, 0, -10);
+    }
+
+    public void Drop(Slot droppedSlot) {
+        if(draggedSlot is SellSlot) {
+            Evt_BoughtItemWithIndex?.Invoke(draggedSlot.Item, InventoryUI.ItemSlots.IndexOf(droppedSlot));
+        }
+
+    }
+
+    public void EndDrag() {
+
+        draggedSlot = null;
+        draggedImage.sprite = null;
+        draggedImage.gameObject.SetActive(false);
+    }
+
 }

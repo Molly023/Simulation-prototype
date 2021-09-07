@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
 
     public Action<int> Evt_MoneyChange;
 
-    [SerializeField] SpriteRenderer body;
+    [SerializeField] SpriteRenderer body = null;
     Sprite defaultBody;
 
     public InteractableDetection InteractableInRange;

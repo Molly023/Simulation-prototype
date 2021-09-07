@@ -54,11 +54,12 @@ public class DialogueManager : MonoBehaviour {
 
     void EndDialogue() {
         DialogueUI.SetActive(false);
+        Utilities.Resume();
 
         Evt_HideDialogue?.Invoke();
         Evt_EndOfDialogue?.Invoke();
         Evt_EndOfDialogue = null;
-        Utilities.Resume();
+        
     }
 
     public void SetControllerEvents(MonoBehaviour obj) {

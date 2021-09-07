@@ -64,7 +64,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
 
     public void OnDrag(PointerEventData eventData) {
-        if (itemData != null) {
+        if (itemData != null && eventData.button == PointerEventData.InputButton.Left) {
             Evt_Dragged.Invoke(this);
             HideTooltip();
         }

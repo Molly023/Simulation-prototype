@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class NPC : MonoBehaviour {
 
     public UnityEvent<Player> Evt_AfterTalk;
-    [SerializeField] new string name;
+    [SerializeField] new string name =null;
 
     public string Name => name;
     Dialogue dialogues;

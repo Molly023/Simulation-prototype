@@ -7,7 +7,7 @@ public class Interactable : MonoBehaviour {
 
     public UnityEvent<Player> Evt_Interacted = new UnityEvent<Player>();
 
-    [SerializeField] Transform interactableShowPoint;
+    [SerializeField] Transform interactableShowPoint = null;
     GameObject interactableUI;
 
     private void Start() {

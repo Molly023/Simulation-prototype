@@ -22,6 +22,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8517410143018737489, guid: 700bde83c04a63b4894393432040f4dd, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8517410143018737493, guid: 700bde83c04a63b4894393432040f4dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -68,7 +72,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8517410143018737494, guid: 700bde83c04a63b4894393432040f4dd, type: 3}
       propertyPath: m_Name
-      value: NPC
+      value: Angelo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 700bde83c04a63b4894393432040f4dd, type: 3}

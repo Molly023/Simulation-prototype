@@ -9,15 +9,16 @@ public class InventoryUI : MonoBehaviour {
 
     public UnityEvent<int, int> Evt_Swapping = new UnityEvent<int, int>();
     public UnityEvent<int> Evt_Equip = new UnityEvent<int>();
+    public UnityEvent Evt_Unequip = new UnityEvent();
 
-    [SerializeField] List<Slot> itemSlots;
+    [SerializeField] List<Slot> itemSlots = null;
     public List<Slot> ItemSlots => itemSlots;
     Slot draggedSlot;
 
     public GameObject InventoryObject;
-    Image draggedImage;
+    Image draggedImage; 
 
-    [SerializeField] EquippableSlot equippableSlot;
+    [SerializeField] EquippableSlot equippableSlot = null;
 
     void Start() {
 
@@ -25,11 +26,13 @@ public class InventoryUI : MonoBehaviour {
             slot.Evt_Dragged.AddListener(Drag);
             slot.Evt_EndDragged.AddListener(EndDrag);
             slot.Evt_Dropped.AddListener(Drop);
+            slot.Evt_RightClicked.AddListener(Equip);
         }
 
         equippableSlot?.Evt_Dragged.AddListener(Drag);
         equippableSlot?.Evt_EndDragged.AddListener(EndDrag);
         equippableSlot?.Evt_Dropped.AddListener(Drop);
+        equippableSlot?.Evt_RightClicked.AddListener(Unequip);
 
         draggedImage = SingletonManager.Get<UI>().DraggedImage;
        
@@ -49,7 +52,7 @@ public class InventoryUI : MonoBehaviour {
         else if (draggedSlot is EquippableSlot)
             Unequip(droppedSlot);
 
-        else
+        else if(draggedSlot is Slot)
             Evt_Swapping?.Invoke(ItemSlots.IndexOf(draggedSlot), ItemSlots.IndexOf(droppedSlot));
         
     }
@@ -76,13 +79,23 @@ public class InventoryUI : MonoBehaviour {
     }
 
     public void Equip(Slot droppedEquippable) {
-       
-        if(draggedSlot.Item is Equippable)
-            Evt_Equip.Invoke(ItemSlots.IndexOf(draggedSlot));
+
+        if (draggedSlot) {
+            if (draggedSlot.Item is Equippable)
+                Evt_Equip.Invoke(ItemSlots.IndexOf(draggedSlot));
+        }
+
+        else if(droppedEquippable.Item is Equippable && equippableSlot) {
+            Evt_Equip.Invoke(ItemSlots.IndexOf(droppedEquippable));
+        }
     }
 
     public void Unequip(Slot droppedSlot) {
-        Evt_Equip?.Invoke(ItemSlots.IndexOf(droppedSlot));
+        if(droppedSlot is EquippableSlot) {
+            Evt_Unequip.Invoke();
+        }
+        else
+            Evt_Equip?.Invoke(ItemSlots.IndexOf(droppedSlot));
     }
 
 }
