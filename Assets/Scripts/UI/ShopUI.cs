@@ -9,6 +9,7 @@ public class ShopUI : MonoBehaviour {
 
     public Action<Item> Evt_BoughtItem;
     public Action Evt_Closed;
+    public Action Evt_Opened;
     public Action<int> Evt_SellItem;
 
     public RectTransform content;
@@ -17,11 +18,13 @@ public class ShopUI : MonoBehaviour {
     public SellSlot SellSlotPrefab;
     List<SellSlot> SellSlots = new List<SellSlot>();
     Tooltip tooltip;
+    Image draggableImage;
     public InventoryUI InventoryUI;
 
     private void Start() {
-
-        tooltip = SingletonManager.Get<UI>().Tooltip;
+        UI ui = SingletonManager.Get<UI>();
+        tooltip = ui.Tooltip;
+        draggableImage = ui.DraggedImage;
 
         foreach (Slot slot in InventoryUI.ItemSlots) {
             slot.Evt_RightClicked.AddListener(SellItem);
@@ -49,6 +52,8 @@ public class ShopUI : MonoBehaviour {
 
             SellSlots[i].gameObject.SetActive(false);
         }
+
+        Evt_Opened?.Invoke();
     }
 
   

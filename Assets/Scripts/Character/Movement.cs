@@ -5,7 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour {
 
     Rigidbody2D rb2d;
-    [SerializeField] float speed = 500;
+    public float Speed = 250;
     public Vector2 Direction=> rb2d.velocity.normalized;
 
     private void Start() {
@@ -13,6 +13,6 @@ public class Movement : MonoBehaviour {
     }
     public void Move(Vector2 direction) {
 
-        rb2d.velocity = direction * speed * Time.deltaTime;
+        rb2d.velocity = direction * Speed * Time.deltaTime;
     }
 }

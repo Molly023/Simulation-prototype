@@ -21,8 +21,7 @@ public class Shop : MonoBehaviour {
         PlayerController pController= SingletonManager.Get<PlayerController>();
         Evt_Open += () => pController.State = ControlState.Shop;
         Evt_Close += () => pController.State = ControlState.Player;
-        pController.Evt_CloseShopUI += CloseShop;
-
+        
     }
 
     public void OpenShop(Player player) {
@@ -41,6 +40,7 @@ public class Shop : MonoBehaviour {
 
     public void CloseShop() {
         shopUI.gameObject.SetActive(false);
+        shopUI.HideTooltip();
         //playerController.State = ControlState.Player;
         playerInShop = null;
         Utilities.Resume();
@@ -96,6 +96,9 @@ public class Shop : MonoBehaviour {
         shopUI.Evt_BoughtItem += Buy;
         shopUI.Evt_SellItem += Sell;
         shopUI.InventoryUI.Evt_Swapping.AddListener(RearrangeInventory);
+
+        PlayerController pController = SingletonManager.Get<PlayerController>();
+        pController.Evt_CloseShopUI += shopUI.CloseShop;
     }
 
     IEnumerator FlickerMoney() {
