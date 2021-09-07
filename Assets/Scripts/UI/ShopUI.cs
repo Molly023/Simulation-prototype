@@ -62,7 +62,7 @@ public class ShopUI : MonoBehaviour {
     }
 
   
-    public void BoughtItem(Slot itemSlot) {
+    void BoughtItem(Slot itemSlot) {
         Evt_BoughtItem?.Invoke(itemSlot.Item);
 
     }
@@ -87,7 +87,7 @@ public class ShopUI : MonoBehaviour {
         moneyText.gameObject.SetActive(show);
     }
 
-    public void SellItem(Slot itemSlot) {
+    void SellItem(Slot itemSlot) {
         Evt_SellItem?.Invoke(InventoryUI.ItemSlots.IndexOf(itemSlot));
     }
 
@@ -95,21 +95,21 @@ public class ShopUI : MonoBehaviour {
         InventoryUI.UpdateData(inventory);
     }
 
-    public void Drag(Slot slot) {
+    void Drag(Slot slot) {
         draggedSlot = slot;
         draggedImage.sprite = slot.ItemSprite.sprite;
         draggedImage.gameObject.SetActive(true);
         draggedImage.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(0, 0, -10);
     }
 
-    public void Drop(Slot droppedSlot) {
+    void Drop(Slot droppedSlot) {
         if(draggedSlot is SellSlot) {
             Evt_BoughtItemWithIndex?.Invoke(draggedSlot.Item, InventoryUI.ItemSlots.IndexOf(droppedSlot));
         }
 
     }
 
-    public void EndDrag() {
+    void EndDrag() {
 
         draggedSlot = null;
         draggedImage.sprite = null;

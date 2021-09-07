@@ -6,6 +6,7 @@ using System;
 public class Inventory : MonoBehaviour {
 
     public Action<Equippable> Evt_OnEquip;
+    public Action<Item> Evt_
     public Item[] Items { get; private set; }
     [SerializeField] int itemsCanStore = 24;
 
@@ -44,13 +45,6 @@ public class Inventory : MonoBehaviour {
         return true;
     }
 
-    public bool Remove(Item itemToRemove) {
-        if (!Contains(itemToRemove)) return false;
-
-        RemoveItem(itemToRemove);
-        inventoryUI?.UpdateData(this);
-        return true;
-    }
 
     public void SwapItems(int index1, int index2) {
 
@@ -70,17 +64,6 @@ public class Inventory : MonoBehaviour {
         return false;
     }
 
-    public void RemoveItem(Item item) {
-        
-        for (int i = 0; i < Items.Length; i++) {
-            if (item.Id == Items[i].Id) {
-                Items[i] = null;
-                inventoryUI?.UpdateData(this);
-                return;
-            }
-        }
-    }
-
     public void RemoveItem(int index) {
         Items[index] = null;
     }
@@ -98,7 +81,6 @@ public class Inventory : MonoBehaviour {
     public void Unequip() {
         AddItem(EquippedItem);
         EquippedItem = null;
-
         Evt_OnEquip?.Invoke(EquippedItem);
         inventoryUI?.UpdateData(this);
     }

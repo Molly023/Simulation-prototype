@@ -93,7 +93,7 @@ public class Shop : MonoBehaviour {
     void Sell(int index) {
 
         playerInShop.Sell(playerInventory.Items[index].Price / 2);
-        playerInventory.Items[index] = null;
+        playerInventory.RemoveItem(index);
 
         shopUI.SetPlayerMoney(playerInShop.Money);
         shopUI.InventoryUI.UpdateData(playerInventory);

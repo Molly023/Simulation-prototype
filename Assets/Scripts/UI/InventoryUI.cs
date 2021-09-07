@@ -38,14 +38,14 @@ public class InventoryUI : MonoBehaviour {
        
     }
 
-    public void Drag(Slot slot) {
+    void Drag(Slot slot) {
         draggedSlot = slot;
         draggedImage.sprite = slot.ItemSprite.sprite;
         draggedImage.gameObject.SetActive(true);
         draggedImage.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(0, 0, -10);
     }
 
-    public void Drop(Slot droppedSlot) {
+    void Drop(Slot droppedSlot) {
         if (droppedSlot is EquippableSlot)
             Equip(droppedSlot);
 
@@ -57,7 +57,7 @@ public class InventoryUI : MonoBehaviour {
         
     }
 
-    public void EndDrag() {
+    void EndDrag() {
   
         draggedSlot = null;
         draggedImage.sprite = null;
@@ -78,7 +78,7 @@ public class InventoryUI : MonoBehaviour {
         return InventoryObject.activeSelf;
     }
 
-    public void Equip(Slot droppedEquippable) {
+    void Equip(Slot droppedEquippable) {
 
         if (draggedSlot) {
             if (draggedSlot.Item is Equippable)
@@ -90,7 +90,7 @@ public class InventoryUI : MonoBehaviour {
         }
     }
 
-    public void Unequip(Slot droppedSlot) {
+    void Unequip(Slot droppedSlot) {
         if(droppedSlot is EquippableSlot) {
             Evt_Unequip.Invoke();
         }
