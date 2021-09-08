@@ -12,16 +12,17 @@ public static class Utilities {
     /// Gets a line from a file in resources
     /// </summary>
     public static string GetLine(string fileName, int lineNumber, string folder = "") {
-        string name;
-        string path = "Assets/Resources/";
+        string path = "";
         if (folder != "") {
             path += folder + "/";
         }
-        path += fileName + ".txt";
+        path += fileName;
 
-        string[] lines = System.IO.File.ReadAllLines(path);
+        TextAsset txt = Resources.Load<TextAsset>(path);
 
-        name = lines[lineNumber];
+        string[] lines = txt.ToString().Split('\n');
+
+        string name = lines[lineNumber];
 
         return name;
     }
@@ -29,13 +30,17 @@ public static class Utilities {
     /// Gets all lines from a file in resources
     /// </summary>
     public static string[] GetAllLines(string fileName, string folder = "") {
-        string path = "Assets/Resources/";
+
+        
+
+        string path = "";
         if (folder != "") {
             path += folder + "/";
         }
-        path += fileName + ".txt";
+        path += fileName;
+        TextAsset txt = Resources.Load<TextAsset>(path);
 
-        string[] lines = System.IO.File.ReadAllLines(path);
+        string[] lines = txt.ToString().Split('\n');
 
         return lines;
     }
