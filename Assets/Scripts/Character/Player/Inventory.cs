@@ -6,7 +6,6 @@ using System;
 public class Inventory : MonoBehaviour {
 
     public Action<Equippable> Evt_OnEquip;
-    public Action<Item> Evt_
     public Item[] Items { get; private set; }
     [SerializeField] int itemsCanStore = 24;
 
